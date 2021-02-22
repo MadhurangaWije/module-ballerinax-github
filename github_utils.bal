@@ -15,8 +15,8 @@
 // under the License.
 
 import ballerina/http;
-// import ballerina/java;
-import ballerina/regex;
+import ballerina/java;
+import ballerina/stringutils;
 import ballerina/lang.'string as strings;
 
 # Construct the request by adding the payload and authorization tokens.
@@ -166,7 +166,7 @@ isolated function stringToJson(string src) returns json | error {
 # + index - Index of the string component which should be returned
 # + return - String component
 isolated function split(string receiver, string delimeter, int index) returns string {
-    string[] resultArray = regex:split(receiver, delimeter);
+    string[] resultArray = stringutils:split(receiver, delimeter);
     return resultArray[index];
 }
 

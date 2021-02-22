@@ -29,8 +29,8 @@ public client class Client {
 
     public function init(GitHubConfiguration gitHubConfig) {
         self.accessToken = gitHubConfig.accessToken;
-        self.githubRestClient = checkpanic new(GIT_REST_API_URL, gitHubConfig.clientConfig);
-        self.githubGraphQlClient = checkpanic new(GIT_GRAPHQL_API_URL, gitHubConfig.clientConfig);
+        self.githubRestClient = new(GIT_REST_API_URL, gitHubConfig.clientConfig);
+        self.githubGraphQlClient = new(GIT_GRAPHQL_API_URL, gitHubConfig.clientConfig);
     }
 
     # Get authenticated User
@@ -1267,8 +1267,8 @@ public client class Client {
         else{
             io:println(validatedResponse);
 
-            FoundIssue issue = checkpanic validatedResponse.cloneWithType(FoundIssue);
-
+            // FoundIssue issue = checkpanic validatedResponse.cloneWithType(FoundIssue);
+            FoundIssue issue = {};
             return issue;
         }
         

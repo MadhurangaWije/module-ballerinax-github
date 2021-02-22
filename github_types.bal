@@ -848,17 +848,17 @@ public type OrganizationMembership record {
 };
 
 public type FoundIssue record {
-    string id;
-    string url;
-    string repository_url;
-    string labels_url;
-    string comments_url;
-    string events_url;
-    string html_url;
-    int number;
-    string state;
-    string title;
-    string body;
+    string id="";
+    string url="";
+    string repository_url="";
+    string labels_url="";
+    string comments_url="";
+    string events_url="";
+    string html_url="";
+    int number=0;
+    string state="";
+    string title="";
+    string body="";
 };
 
 // public enum ReviewAction {

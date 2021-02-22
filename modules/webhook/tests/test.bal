@@ -17,7 +17,7 @@
 import ballerina/config;
 import ballerina/http;
 import ballerina/oauth2;
-import ballerina/lang.runtime;
+import ballerina/runtime;
 import ballerina/test;
 import ballerina/websub;
 import ballerinax/github;

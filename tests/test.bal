@@ -14,19 +14,21 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/config;
 import ballerina/http;
 import ballerina/log;
+import ballerina/system;
 import ballerina/test;
 
-configurable string & readonly testOrganizationName = ?;
-configurable string & readonly testRepositoryName = ?;
-configurable string & readonly testResourcePath = ?;
-configurable string & readonly testIssueAssignee = ?;
-configurable string & readonly testUserName = ?;
-configurable string & readonly accessToken = ?;
+string testOrganizationName = getConfigValue("ORG_NAME");
+string testRepositoryName = getConfigValue("REPO_NAME");
+string testResourcePath = getConfigValue("RESOURCE_PATH");
+string testIssueAssignee = getConfigValue("ASSIGNEE");
+string testUserName = getConfigValue("GITHUB_USERNAME");
+
 
 GitHubConfiguration gitHubConfig = {
-    accessToken: accessToken
+    accessToken: getConfigValue("ACCESS_TOKEN")
 };
 
 Client githubClient = new (gitHubConfig);
@@ -99,7 +101,7 @@ function testGetOrganizationProjectList() {
 }
 
 @test:Config {
-    dependsOn: [testGetOrganizationProjectList],
+    dependsOn: ["testGetOrganizationProjectList"],
     groups: ["network-calls"]
 }
 function testGetOrganizationProjectListNextPage() {
@@ -149,7 +151,7 @@ function testGetProjectColumnList() {
 }
 
 @test:Config {
-    dependsOn: [testGetProjectColumnList],
+    dependsOn: ["testGetProjectColumnList"],
     groups: ["network-calls"]
 }
 function testGetCardListOfColumn() {
@@ -173,7 +175,7 @@ function testGetCardListOfColumn() {
 }
 
 @test:Config {
-    dependsOn: [testGetCardListOfColumn],
+    dependsOn: ["testGetCardListOfColumn"],
     groups: ["network-calls"]
 }
 function testGetCardListNextPage() {
@@ -223,7 +225,7 @@ function testGetOrganizationRepositoryList() {
 }
 
 @test:Config {
-    dependsOn: [testGetOrganizationRepositoryList],
+    dependsOn: ["testGetOrganizationRepositoryList"],
     groups: ["network-calls"]
 }
 function testGetOrganizationRepositoryListNextPage() {
@@ -308,7 +310,7 @@ function testGetRepositoryProjectList() {
 }
 
 @test:Config {
-    dependsOn: [testGetRepositoryProjectList],
+    dependsOn: ["testGetRepositoryProjectList"],
     groups: ["network-calls"]
 }
 function testGetRepositoryProjectListNextPage() {
@@ -357,7 +359,7 @@ function testGetPullRequestList() {
 }
 
 @test:Config {
-    dependsOn: [testGetPullRequestList],
+    dependsOn: ["testGetPullRequestList"],
     groups: ["network-calls"]
 }
 function testGetPullRequestListNextPage() {
@@ -406,7 +408,7 @@ function testGetIssueList() {
 }
 
 @test:Config {
-    dependsOn: [testGetIssueList],
+    dependsOn: ["testGetIssueList"],
     groups: ["network-calls"]
 }
 function testGetIssueListNextPage() {
