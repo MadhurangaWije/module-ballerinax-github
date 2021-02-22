@@ -1,0 +1,11 @@
+accessToken = "e16c99673bfa80c004aba9fd2724a324ff61c84d"
+
+TOPIC_GITHUB="https://github.com/MadhurangaWije/github-connector/events/*.json"
+SECRET_GITHUB="GITHUB_SECRET"
+CALLBACK_GITHUB="http://59939afbbba8.ngrok.io/github"
+
+testUserName = "MadhurangaWije"
+testRepositoryName = "product-is"
+testIssueAssignee = "MadhurangaWije"
+testResourcePath = "Github/MadhurangaWije/github-connector"
+testOrganizationName = "Wso2"

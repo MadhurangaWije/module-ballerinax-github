@@ -45,30 +45,31 @@ isolated function parseBoolean(json input) returns boolean | error {
 // JSON --> Project
 //********************************
 isolated function jsonToProject(json sourceJson) returns Project | error {
-    Project project = {};
-    project.id = <string>sourceJson.id;
-    project.name = <string>sourceJson.name;
-    project.body = <string>sourceJson.body;
-    project.number = check parseInt(check sourceJson.number);
-    project.createdAt = <string>sourceJson.createdAt;
-    project.closed = (sourceJson.closed is boolean) ? sourceJson.closed.toString() : "";
-    project.closedAt = (sourceJson.closedAt is string) ? (<string>sourceJson.closedAt) : "";
-    project.updatedAt = (sourceJson.updatedAt is string) ? (<string>sourceJson.updatedAt) : "";
-    project.resourcePath = <string>sourceJson.resourcePath;
-    project.state = <string>sourceJson.state;
-    project.url = <string>sourceJson.url;
-    project.resourcePath = <string>sourceJson.resourcePath;
-    project.viewerCanUpdate = <boolean>sourceJson.viewerCanUpdate;
-    project.creator.login = <string>sourceJson.creator.login;
-    project.creator.resourcePath = <string>sourceJson.creator.resourcePath;
-    project.creator.url = <string>sourceJson.creator.url;
-    project.creator.avatarUrl = <string>sourceJson.creator.avatarUrl;
-    project.owner.id = <string>sourceJson.owner.id;
-    project.owner.projectsResourcePath = <string>sourceJson.owner.projectsResourcePath;
-    project.owner.projectsUrl = <string>sourceJson.owner.projectsUrl;
-    project.owner.viewerCanCreateProjects = (sourceJson.owner.viewerCanCreateProjects is boolean) ?
-    sourceJson.owner.viewerCanCreateProjects.toString() : "";
-    project.owner.__typename = <string>sourceJson.owner.__typename;
+    Project project = checkpanic sourceJson.cloneWithType(Project);
+    // Project project = {};
+    // project.id = <string>sourceJson.id;
+    // project.name = <string>sourceJson.name;
+    // project.body = <string>sourceJson.body;
+    // project.number = check parseInt(check sourceJson.number);
+    // project.createdAt = <string>sourceJson.createdAt;
+    // project.closed = (sourceJson.closed is boolean) ? sourceJson.closed.toString() : "";
+    // project.closedAt = (sourceJson.closedAt is string) ? (<string>sourceJson.closedAt) : "";
+    // project.updatedAt = (sourceJson.updatedAt is string) ? (<string>sourceJson.updatedAt) : "";
+    // project.resourcePath = <string>sourceJson.resourcePath;
+    // project.state = <string>sourceJson.state;
+    // project.url = <string>sourceJson.url;
+    // project.resourcePath = <string>sourceJson.resourcePath;
+    // project.viewerCanUpdate = <boolean>sourceJson.viewerCanUpdate;
+    // project.creator.login = <string>sourceJson.creator.login;
+    // project.creator.resourcePath = <string>sourceJson.creator.resourcePath;
+    // project.creator.url = <string>sourceJson.creator.url;
+    // project.creator.avatarUrl = <string>sourceJson.creator.avatarUrl;
+    // project.owner.id = <string>sourceJson.owner.id;
+    // project.owner.projectsResourcePath = <string>sourceJson.owner.projectsResourcePath;
+    // project.owner.projectsUrl = <string>sourceJson.owner.projectsUrl;
+    // project.owner.viewerCanCreateProjects = (sourceJson.owner.viewerCanCreateProjects is boolean) ?
+    // sourceJson.owner.viewerCanCreateProjects.toString() : "";
+    // project.owner.__typename = <string>sourceJson.owner.__typename;
     return project;
 }
 
@@ -79,13 +80,13 @@ isolated function jsonToProjectList(json source_json, string listOwner, string s
     ProjectList target_projectList = new;
     target_projectList.listOwner = listOwner;
     target_projectList.projectListQuery = stringQuery;
-    json pageInfoJSON = <json>source_json.pageInfo;
+    json pageInfoJSON = checkpanic source_json.pageInfo;
     var value = pageInfoJSON.cloneWithType(PageInfo);
     if (value is PageInfo) {
         target_projectList.pageInfo = value;
     }
     json[] nodes = [];
-    json nodes_filtered = <json>source_json.nodes;
+    json nodes_filtered =  checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
 
     if (result is json[]) {
@@ -111,12 +112,12 @@ isolated function jsonToCardList(json source_json, string columnId, string listO
     target_cardList.columnId = columnId;
     target_cardList.cardListQuery = stringQuery;
     target_cardList.listOwner = listOwner;
-    json nodes_filtered = <json>source_json.pageInfo;
+    json nodes_filtered = checkpanic source_json.pageInfo;
     var value = nodes_filtered.cloneWithType(PageInfo);
     if (value is PageInfo) {
         target_cardList.pageInfo = value;
     }
-    nodes_filtered = <json>source_json.nodes;
+    nodes_filtered = checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
     json[] nodes = [];
     if (result is json[]) {
@@ -140,11 +141,20 @@ isolated function jsonToCardList(json source_json, string columnId, string listO
 //********************************
 isolated function jsonToColumn(json source_json, string listOwner, string stringQuery) returns Column {
     Column target_column = new;
-    target_column.id = source_json.id.toString();
-    target_column.name = source_json.name.toString();
+    json|error id = source_json.id;
+    if (id is json) {
+        target_column.id = id.toString();
+    }
+    json|error name = source_json.name;
+    if (name is json) {
+        target_column.name = name.toString();
+    }
     target_column.columnQuery = stringQuery;
     target_column.listOwner = listOwner;
-    target_column.cards = jsonToCardList(<json>source_json.cards, source_json.id.toString(), listOwner, stringQuery);
+
+    json cards = checkpanic source_json.cards;
+
+    target_column.cards = jsonToCardList(cards, target_column.id, listOwner, stringQuery);
     return target_column;
 }
 
@@ -155,13 +165,13 @@ isolated function jsonToColumnList(json source_json, string listOwner, string st
     ColumnList target_columnList = new;
     target_columnList.listOwner = listOwner;
     target_columnList.columnListQuery = stringQuery;
-    json nodes_filtered = <json>source_json.pageInfo;
+    json nodes_filtered = checkpanic source_json.pageInfo;
     var value = nodes_filtered.cloneWithType(PageInfo);
     json[] nodes = [];
     if (value is PageInfo) {
         target_columnList.pageInfo = value;
     }
-    nodes_filtered = <json>source_json.nodes;
+    nodes_filtered = checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
     if (result is json[]) {
         nodes = result;
@@ -182,13 +192,13 @@ isolated function jsonToColumnList(json source_json, string listOwner, string st
 isolated function jsonToRepositoryList(json source_json, string stringQuery) returns (RepositoryList) {
     RepositoryList target_repositoryList = new;
     target_repositoryList.repositoryListQuery = stringQuery;
-    json nodes_filtered = <json>source_json.pageInfo;
+    json nodes_filtered = checkpanic source_json.pageInfo;
     var value = nodes_filtered.cloneWithType(PageInfo);
     if (value is PageInfo) {
         target_repositoryList.pageInfo = value;
     }
     json[] nodes = [];
-    nodes_filtered = <json>source_json.nodes;
+    nodes_filtered = checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
     if (result is json[]) {
         nodes = result;
@@ -209,12 +219,12 @@ isolated function jsonToRepositoryList(json source_json, string stringQuery) ret
 isolated function jsonToPullRequestList(json source_json, string stringQuery) returns (PullRequestList) {
     PullRequestList target_pullRequestList = new;
     target_pullRequestList.pullRequestListQuery = stringQuery;
-    json nodes_filtered = <json>source_json.pageInfo;
+    json nodes_filtered = checkpanic source_json.pageInfo;
     var value = nodes_filtered.cloneWithType(PageInfo);
     if (value is PageInfo) {
         target_pullRequestList.pageInfo = value;
     }
-    nodes_filtered = <json>source_json.nodes;
+    nodes_filtered = checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
     json[] nodes = [];
     if (result is json[]) {
@@ -239,12 +249,12 @@ isolated function jsonToPullRequestList(json source_json, string stringQuery) re
 isolated function jsonToBranchList(json source_json, string stringQuery) returns (BranchList) {
     BranchList target_branchList = new;
     target_branchList.branchListQuery = stringQuery;
-    json nodes_filtered = <json>source_json.pageInfo;
+    json nodes_filtered = checkpanic source_json.pageInfo;
     var pageInfo = nodes_filtered.cloneWithType(PageInfo);
     if (pageInfo is PageInfo) {
         target_branchList.pageInfo = pageInfo;
     }
-    nodes_filtered = <json>source_json.nodes;
+    nodes_filtered = checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
     json[] nodes = [];
     if (result is json[]) {
@@ -264,7 +274,10 @@ isolated function jsonToBranchList(json source_json, string stringQuery) returns
 //********************************
 isolated function jsonToBranch(json source_json) returns (Branch) {
     Branch target_branch = {};
-    target_branch.name = source_json.name.toString();
+    json|error name = source_json.name;
+    if (name is json) {
+        target_branch.name = name.toString();
+    }
     return target_branch;
 }
 
@@ -274,12 +287,12 @@ isolated function jsonToBranch(json source_json) returns (Branch) {
 isolated function jsonToIssueList(json source_json, string stringQuery) returns (IssueList) {
     IssueList target_issueList = new;
     target_issueList.issueListQuery = stringQuery;
-    json nodes_filtered = <json>source_json.pageInfo;
+    json nodes_filtered = checkpanic source_json.pageInfo;
     var pageInfo = nodes_filtered.cloneWithType(PageInfo);
     if (pageInfo is PageInfo) {
         target_issueList.pageInfo = pageInfo;
     }
-    nodes_filtered = <json>source_json.nodes;
+    nodes_filtered = checkpanic source_json.nodes;
     var result = nodes_filtered.cloneWithType(JsonArray);
     json[] nodes = [];
     if (result is json[]) {
@@ -299,14 +312,46 @@ isolated function jsonToIssueList(json source_json, string stringQuery) returns 
 //********************************
 isolated function restResponseJsonToIssue(json source_json) returns (Issue) {
     Issue target_issue = {};
-    target_issue.id = source_json.id.toString();
-    target_issue.title = source_json.title.toString();
-    target_issue.bodyText = source_json.body.toString();
-    target_issue.closedAt = source_json.closed_at.toString();
-    target_issue.createdAt = source_json.created_at.toString();
-    target_issue.author.login = source_json.user.login.toString();
-    target_issue.author.url = source_json.user.url.toString();
-    target_issue.author.avatarUrl = source_json.user.avatar_url.toString();
+    json|error id = source_json.id;
+    if (id is json) {
+        target_issue.id = id.toString();
+    }
+    // target_issue.id = source_json.id.toString();
+    json|error title = source_json.title;
+    if (title is json) {
+        target_issue.title = title.toString();
+    }
+    // target_issue.title = source_json.title.toString();
+    json|error bodyText = source_json.body;
+    if (bodyText is json) {
+        target_issue.bodyText = bodyText.toString();
+    }
+    // target_issue.bodyText = source_json.body.toString();
+    json|error closedAt = source_json.closed_at;
+    if (closedAt is json){
+        target_issue.closedAt = closedAt.toString();
+    }
+    // target_issue.closedAt = source_json.closed_at.toString();
+    json|error createdAt = source_json.created_at;
+    if (createdAt is json){
+        target_issue.createdAt = createdAt.toString();
+    }
+    // target_issue.createdAt = source_json.created_at.toString();
+    json|error login = source_json.user.login;
+    if (login is json){
+        target_issue.author.login = login.toString();
+    }
+    // target_issue.author.login = source_json.user.login.toString();
+    json|error url = source_json.user.url;
+    if (url is json){
+        target_issue.author.url = url.toString();
+    }
+    // target_issue.author.url = source_json.user.url.toString();
+    json|error avatarUrl = source_json.user.avatar_url;
+    if (avatarUrl is json){
+        target_issue.author.avatarUrl = avatarUrl.toString();
+    }
+    // target_issue.author.avatarUrl = source_json.user.avatar_url.toString();
     var number = source_json.number;
     if (number is json) {
         int | error num = parseInt(number);
@@ -314,7 +359,7 @@ isolated function restResponseJsonToIssue(json source_json) returns (Issue) {
             target_issue.number = num;
         }
     }
-    json nodes_filtered = <json>source_json.labels;
+    json nodes_filtered = checkpanic source_json.labels;
     var result = nodes_filtered.cloneWithType(JsonArray);
     json[] labelList = [];
     if (result is json[]) {
@@ -324,13 +369,22 @@ isolated function restResponseJsonToIssue(json source_json) returns (Issue) {
     int i = 0;
     foreach var label in labelList {
         Label singleLabel = {};
-        singleLabel.id = label.id.toString();
-        singleLabel.name = label.name.toString();
-        singleLabel.color = label.color.toString();
+        json|error labelId = label.id;
+        if (labelId is json) {
+            singleLabel.id = labelId.toString();
+        }
+        json|error name = label.name;
+        if (name is json) {
+            singleLabel.name = name.toString();
+        }
+        json|error color = label.color;
+        if (color is json) {
+            singleLabel.color = color.toString();
+        }
         target_issue.labels[i] = singleLabel;
         i = i + 1;
     }
-    nodes_filtered = <json>source_json.assignees;
+    nodes_filtered = checkpanic source_json.assignees;
     var jsonValue = nodes_filtered.cloneWithType(JsonArray);
     json[] assigneeList = [];
     if (jsonValue is json[]) {
@@ -339,9 +393,21 @@ isolated function restResponseJsonToIssue(json source_json) returns (Issue) {
     int j = 0;
     foreach var assignee in assigneeList {
         Assignee singleAssignee = {};
-        singleAssignee.id = assignee.id.toString();
-        singleAssignee.login = assignee.login.toString();
-        singleAssignee.url = assignee.url.toString();
+        json|error assigneeId = assignee.id;
+        if (assigneeId is json) {
+            singleAssignee.id = assigneeId.toString();
+        }
+        // singleAssignee.id = assignee.id.toString();
+        json|error assigneeLogin = assignee.login;
+        if (assigneeLogin is json) {
+            singleAssignee.login = assigneeLogin.toString();
+        }
+        // singleAssignee.login = assignee.login.toString();
+        json|error assigneeUrl = assignee.url;
+        if (assigneeUrl is json) {
+            singleAssignee.url = assigneeUrl.toString();
+        }
+        // singleAssignee.url = assignee.url.toString();
         target_issue.assignees[j] = singleAssignee;
         j = j + 1;
     }
@@ -354,13 +420,37 @@ isolated function restResponseJsonToIssue(json source_json) returns (Issue) {
 //********************************
 isolated function jsonToIssue(json source_json) returns (Issue) {
     Issue target_issue = {};
-    target_issue.id = source_json.id.toString();
-    target_issue.title = source_json.title.toString();
-    target_issue.bodyText = source_json.bodyText.toString();
-    target_issue.closed = source_json.closed.toString();
-    target_issue.closedAt = source_json.closedAt.toString();
-    target_issue.createdAt = source_json.createdAt.toString();
-    json nodes_filtered = <json>source_json.author;
+    json|error issueId =  source_json.id;
+    if (issueId is json) {
+        target_issue.id = issueId.toString();
+    }
+    // target_issue.id = source_json.id.toString();
+    json|error issueTitle =  source_json.title;
+    if (issueTitle is json) {
+        target_issue.title = issueTitle.toString();
+    }
+    // target_issue.title = source_json.title.toString();
+    json|error issueBodyText =  source_json.bodyText;
+    if (issueBodyText is json) {
+        target_issue.bodyText = issueBodyText.toString();
+    }
+    // target_issue.bodyText = source_json.bodyText.toString();
+    json|error issueClosed =  source_json.closed;
+    if (issueClosed is json) {
+        target_issue.closed = issueClosed.toString();
+    }
+    // target_issue.closed = source_json.closed.toString();
+    json|error issueClosedAt =  source_json.closedAt;
+    if (issueClosedAt is json) {
+        target_issue.closedAt = issueClosedAt.toString();
+    }
+    // target_issue.closedAt = source_json.closedAt.toString();
+    json|error issueCreatedAt =  source_json.createdAt;
+    if (issueCreatedAt is json) {
+        target_issue.createdAt = issueCreatedAt.toString();
+    }
+    // target_issue.createdAt = source_json.createdAt.toString();
+    json nodes_filtered = checkpanic source_json.author;
     var value = nodes_filtered.cloneWithType(Creator);
     if (value is Creator) {
         target_issue.author = value;
@@ -375,7 +465,7 @@ isolated function jsonToIssue(json source_json) returns (Issue) {
     }
 
     json[] labelList = [];
-    nodes_filtered = <json>source_json.labels.nodes;
+    nodes_filtered = checkpanic source_json.labels.nodes;
     var jsonValue = nodes_filtered.cloneWithType(JsonArray);
     if (jsonValue is json[]) {
         labelList = jsonValue;
@@ -389,12 +479,24 @@ isolated function jsonToIssue(json source_json) returns (Issue) {
         }
         i = i + 1;
     }
-    target_issue.state = source_json.state.toString();
-    target_issue.updatedAt = source_json.updatedAt.toString();
-    target_issue.url = source_json.url.toString();
+    json|error issueState = source_json.state;
+    if (issueState is json) {
+        target_issue.state = issueState.toString();    
+    }
+    // target_issue.state = source_json.state.toString();
+    json|error issueUpdatedAt = source_json.updatedAt;
+    if (issueUpdatedAt is json) {
+        target_issue.updatedAt = issueUpdatedAt.toString();    
+    }
+    // target_issue.updatedAt = source_json.updatedAt.toString();
+    json|error issueUrl = source_json.url;
+    if (issueUrl is json) {
+        target_issue.url = issueUrl.toString();    
+    }
+    // target_issue.url = source_json.url.toString();
 
     json[] assigneeList = [];
-    nodes_filtered = <json>source_json.assignees.nodes;
+    nodes_filtered = checkpanic source_json.assignees.nodes;
     var jsonVal = nodes_filtered.cloneWithType(JsonArray);
     if (jsonVal is json[]) {
         assigneeList = jsonVal;
@@ -417,11 +519,31 @@ isolated function jsonToIssue(json source_json) returns (Issue) {
 //********************************
 isolated function jsonToRepository(json source_json) returns (Repository) {
     Repository target_repository = {};
-    target_repository.id = source_json.id.toString();
-    target_repository.name = source_json.name.toString();
-    target_repository.createdAt = source_json.createdAt.toString();
-    target_repository.updatedAt = source_json.updatedAt.toString();
-    target_repository.description = source_json.description.toString();
+    json|error repositoryId = source_json.id;
+    if (repositoryId is json) {
+        target_repository.id = repositoryId.toString();
+    } 
+    // target_repository.id = source_json.id.toString();
+    json|error repositoryName = source_json.name;
+    if (repositoryName is json) {
+        target_repository.name = repositoryName.toString();
+    }
+    // target_repository.name = source_json.name.toString();
+    json|error repositoryCreatedAt = source_json.createdAt;
+    if (repositoryCreatedAt is json) {
+        target_repository.createdAt = repositoryCreatedAt.toString();
+    }
+    // target_repository.createdAt = source_json.createdAt.toString();
+    json|error repositoryUpdatedAt = source_json.updatedAt;
+    if (repositoryUpdatedAt is json) {
+        target_repository.updatedAt = repositoryUpdatedAt.toString();
+    }
+    // target_repository.updatedAt = source_json.updatedAt.toString();
+    json|error repositoryDescription = source_json.description;
+    if (repositoryDescription is json) {
+        target_repository.description = repositoryDescription.toString();
+    }
+    // target_repository.description = source_json.description.toString();
     var jsonforkCount = source_json.forkCount;
     if (jsonforkCount is json) {
         var forkCount = parseInt(jsonforkCount);
@@ -485,12 +607,31 @@ isolated function jsonToRepository(json source_json) returns (Repository) {
             target_repository.isPrivate = booleanIsPrivate;
         }
     }
-
-    target_repository.homepageUrl = source_json.homepageUrl.toString();
-    target_repository.lockReason = source_json.lockReason.toString();
-    target_repository.mirrorUrl = source_json.mirrorUrl.toString();
-    target_repository.url = source_json.url.toString();
-    target_repository.sshUrl = source_json.sshUrl.toString();
+    json|error repositoryHomePageUrl = source_json.homepageUrl;
+    if (repositoryHomePageUrl is json) {
+        target_repository.homepageUrl = repositoryHomePageUrl.toString();
+    }
+    // target_repository.homepageUrl = source_json.homepageUrl.toString();
+    json|error repositoryLockReason = source_json.lockReason;
+    if (repositoryLockReason is json) {
+        target_repository.lockReason = repositoryLockReason.toString();
+    }
+    // target_repository.lockReason = source_json.lockReason.toString();
+    json|error repositoryMirrorUrl = source_json.mirrorUrl;
+    if (repositoryMirrorUrl is json) {
+        target_repository.mirrorUrl = repositoryMirrorUrl.toString();
+    }
+    // target_repository.mirrorUrl = source_json.mirrorUrl.toString();
+    json|error repositoryUrl = source_json.url;
+    if (repositoryUrl is json) {
+        target_repository.url = repositoryUrl.toString();
+    }
+    // target_repository.url = source_json.url.toString();
+    json|error repositorySshUrl = source_json.sshUrl;
+    if (repositorySshUrl is json) {
+        target_repository.sshUrl = repositorySshUrl.toString();
+    }
+    // target_repository.sshUrl = source_json.sshUrl.toString();
     if (source_json.owner == null) {
         target_repository.owner = {};
     } else {
@@ -505,7 +646,7 @@ isolated function jsonToRepository(json source_json) returns (Repository) {
     if (source_json.primaryLanguage == null) {
         target_repository.primaryLanguage = {};
     } else {
-        json nodes_filtered = <json>source_json.primaryLanguage;
+        json nodes_filtered = checkpanic source_json.primaryLanguage;
         var result = nodes_filtered.cloneWithType(Language);
         if (result is Language) {
             target_repository.primaryLanguage = result;
@@ -553,3 +694,63 @@ isolated function restResponseJsonToUser(json response) returns User|error {
         return error(ERR_USER, res);
     }
 }
+
+isolated function jsonToPullRequest(map<json> response) returns PullRequest {
+    PullRequest pullRequest = {};
+
+    pullRequest["id"] = response["id"].toString();
+    pullRequest["title"] = response["title"].toString();
+    pullRequest["createdAt"] = response["created_at"].toString();
+    pullRequest["updatedAt"] = response["updated_at"].toString();
+    pullRequest["closed"] = false;
+    pullRequest["closedAt"] = response["closed_at"].toString();
+    pullRequest["mergedAt"] = response["merged_at"].toString();
+    pullRequest["state"] = response["state"].toString();
+    pullRequest["number"] = <int>response["number"];
+    pullRequest["url"] = response["url"].toString();
+    pullRequest["body"] = response["body"].toString();
+    pullRequest["changedFiles"] = response["changed_files"] is ()? 0 : <int>response["changed_files"];
+    pullRequest["additions"] = response["additions"] is ()? 0 : <int>response["additions"];
+    pullRequest["deletions"] = response["deletions"] is ()? 0 : <int>response["deletions"];
+    pullRequest["resourcePath"] = "";
+    pullRequest["revertResourcePath"] = "";
+    pullRequest["revertUrl"] = "";
+    json|error pullRequestRef = response["head"].ref;
+    if (pullRequestRef is json) {
+        pullRequest["headRefName"] = pullRequestRef.toString();    
+    }
+    // pullRequest["headRefName"] = response["head"].ref.toString();
+    json|error pullRequestBaseRefName = response["base"].ref;
+    if (pullRequestBaseRefName is json) {
+        pullRequest["baseRefName"] = pullRequestBaseRefName.toString();    
+    }
+    // pullRequest["baseRefName"] = response["deletions"].ref.toString();
+    pullRequest["author"] = {};
+
+    return pullRequest;
+}
+
+isolated function jsonToPullRequestReviewComment(map<json> response) returns PullRequestReviewComment {
+    PullRequestReviewComment pullRequestReviewComment = {};
+
+    // PullRequestReviewComment["id"] = <int>response["id"];
+    // PullRequestReviewComment["createdAt"] = response["created_at"].toString();
+    // PullRequestReviewComment["updatedAt"] = response["updated_at"].toString();
+    // PullRequestReviewComment["url"] = response["url"].toString();
+    // PullRequestReviewComment["body"] = response["body"].toString();
+    // PullRequestReviewComment["pullRequestReviewId"] = <int>response["pull_request_review_id"];
+    // PullRequestReviewComment["position"] = <int>response["position"];
+    // PullRequestReviewComment["originalPosition"] = <int>response["original_position"];
+    // PullRequestReviewComment["htmlUrl"] = response["html_url"].toString();
+    // PullRequestReviewComment["pullRequestUrl"] = response["pull_request_url"].toString();
+    // PullRequestReviewComment["startLine"] = response["start_line"] is ()? 0 : <int>response["start_line"];
+    // PullRequestReviewComment["originalStartLine"] = response["original_start_line"] is ()? 0 : <int>response["original_start_line"];
+    // PullRequestReviewComment["line"] = <int>response["line"].toString();
+    // PullRequestReviewComment["originalLine"] = <int>response["original_line"].toString();
+    // PullRequestReviewComment["side"] = response["side"] is ()? () : response["side"].toString();
+    // PullRequestReviewComment["startSide"] = response["start_side"] is ()? () : response["start_side"].toString();
+    // PullRequestReviewComment["user"] = {};
+
+    return pullRequestReviewComment;
+}
+

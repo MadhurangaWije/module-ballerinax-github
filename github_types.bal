@@ -31,7 +31,7 @@
 # + url - HTTP URL for the organization
 # + websiteUrl - Organization public profile URL
 # + avatarUrl - Organization public avatar URL
-public type Organization record {|
+public type Organization record {
     string id = "";
     string login = "";
     string name = "";
@@ -44,7 +44,14 @@ public type Organization record {|
     string? url = "";
     string? websiteUrl = "";
     string? avatarUrl = "";
-|};
+    string node_id?;
+    string repos_url?;
+    string events_url?;
+    string hooks_url?;
+    string issues_url?;
+    string members_url?;
+    string public_members_url?;
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       End of Organization object                                                  //
@@ -75,7 +82,7 @@ public type Organization record {|
 # + owner - Owner of the repository
 # + primaryLanguage - Primary language of the repository code
 # + stargazerCount - The count
-public type Repository record {|
+public type Repository record {
     string id = "";
     string name = "";
     string createdAt = "";
@@ -97,7 +104,7 @@ public type Repository record {|
     RepositoryOwner owner = {};
     Language primaryLanguage = {};
     int? stargazerCount = 0;
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           End of Repository object                                                //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +161,7 @@ public class RepositoryList {
 # + viewerCanUpdate - Identifies whether current viewer can update this object
 # + creator - User who originally created the project
 # + owner - Project owner (Repository or Organization)
-public type Project record {|
+public type Project record {
     string id = "";
     string name = "";
     string body = "";
@@ -169,7 +176,7 @@ public type Project record {|
     boolean viewerCanUpdate = false;
     Creator creator = {};
     ProjectOwner owner = {};
-|};
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                             End of Project object                                                 //
@@ -283,7 +290,7 @@ public class ColumnList {
 # + creator - User who created this card
 # + column - Project column this card is associated under
 # + content - Card content
-public type Card record {|
+public type Card record {
     string id = "";
     string? note = "";
     string state = "";
@@ -293,7 +300,7 @@ public type Card record {|
     Creator creator = {};
     json column = {};
     json content = {};
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                               End of Card object                                                  //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,13 +314,13 @@ public type Card record {|
 # + listOwner - The owner list
 # + pageInfo - The page info
 # + nodes - The nodes
-public type CardList record {|
+public type CardList record {
     string columnId = "";
     string cardListQuery = "";
     string listOwner = "";
     PageInfo pageInfo = {};
     Card[] nodes = [];
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                            End of CardList object                                                 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,7 +349,7 @@ public type CardList record {|
 # + headRefName - Name of the head Ref associated with the pull request
 # + baseRefName - Name of the base Ref associated with the pull request
 # + author - User who created the pull rquest
-public type PullRequest record {|
+public type PullRequest record {
     string id = "";
     string title = "";
     string createdAt = "";
@@ -363,7 +370,7 @@ public type PullRequest record {|
     string? headRefName = "";
     string? baseRefName = "";
     Creator author = {};
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           End of PullRequest object                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,9 +414,9 @@ public class PullRequestList {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # Represents a github branch.
 # + name - Branch name
-public type Branch record {|
+public type Branch record {
     string name = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                              End of Branch object                                                  //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,7 +472,7 @@ public class BranchList {
 # + updatedAt - Date and time when the object was updated
 # + url - HTTP URL of the issue
 # + assignees - List of users assigned to the issue
-public type Issue record {|
+public type Issue record {
     string id = "";
     string? bodyText = "";
     string? closed = "";
@@ -479,7 +486,7 @@ public type Issue record {|
     string? updatedAt = "";
     string url = "";
     Assignee[] assignees = [];
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                              End of Issue object                                                  //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -526,12 +533,12 @@ public class IssueList {
 # + resourcePath - HTTP path of the creator
 # + url - HTTP URL of the creator
 # + avatarUrl - HTTP URL of the public avatar of the creator
-public type Creator record {|
+public type Creator record {
     string login = "";
     string? resourcePath = "";
     string? url = "";
     string? avatarUrl = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                            End of Creator object                                                  //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -545,14 +552,14 @@ public type Creator record {|
 # + projectsUrl - HTTP URL listing owner projects
 # + viewerCanCreateProjects - Identifies whether the current viewer can create new projects on the owner
 # + __typename - The project owner type name
-public type ProjectOwner record {|
+public type ProjectOwner record {
     string id = "";
     string projectsResourcePath = "";
     string projectsUrl = "";
     string viewerCanCreateProjects = "";
     string __typename = "";
 
-|};
+};
 //*********************************************************************************************************************
 // ProjectOwner bound functions
 //*********************************************************************************************************************
@@ -569,13 +576,13 @@ public type ProjectOwner record {|
 # + url - HTTP URL of the owner
 # + avatarUrl - HTTP URL of the public avatar of the repository owner
 # + resourcePath - HTTP path of the repository owner recource
-public type RepositoryOwner record {|
+public type RepositoryOwner record {
     string id = "";
     string login = "";
     string url = "";
     string? avatarUrl = "";
     string? resourcePath = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          End RepositoryOwner object                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -587,11 +594,11 @@ public type RepositoryOwner record {|
 # + title - Title of the card
 # + url - HTTP URL for the content of the card
 # + issueState - State of the issue (OPEN, CLOSED)
-public type Content record {|
+public type Content record {
     string? title = "";
     string? url = "";
     string? issueState = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           End of Content object                                                   //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -603,11 +610,11 @@ public type Content record {|
 # + id - Language identification number
 # + name - Name of the language
 # + color - Color defined for the language
-public type Language record {|
+public type Language record {
     string id = "";
     string? name = "";
     string? color = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                             End of Language object                                                //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -620,12 +627,12 @@ public type Language record {|
 # + hasPreviousPage - Identifies whether there is a previous page of results
 # + startCursor - Start cursor pointing to the begining of the current result set
 # + endCursor - End cursor pointing to the end of the current result set
-public type PageInfo record {|
+public type PageInfo record {
     boolean hasNextPage = false;
     boolean hasPreviousPage = false;
     string? startCursor = "";
     string? endCursor = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                            End of PageInfo object                                                 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -638,12 +645,12 @@ public type PageInfo record {|
 # + name - Label name
 # + description - Description of the label
 # + color - Color of the label
-public type Label record {|
+public type Label record {
     string id = "";
     string name = "";
     string? description = "";
     string? color = "";
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                             End of Label object                                                   //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -671,7 +678,7 @@ public type Assignee record {|
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                            User object                                                 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public type User record {|
+public type User record {
     int id ;
     string login;
     string url;
@@ -711,16 +718,151 @@ public type User record {|
     int collaborators?;
     boolean two_factor_authentication?;
     Plan plan?;
-|};
+};
 
-public type Plan record {|
+public type Plan record {
     string name;
     int space;
     int collaborators;
     int private_repos;
-|};
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          End User object                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 public type JsonArray json[];
+
+public type CreatePullRequest record {
+    string title?;
+    string head;
+    string base;
+    string body?;
+    boolean maintainer_can_modify?;
+    boolean draft?;
+    int issue?;
+};
+
+public type UpdatePullRequest record {
+    string title;
+    string body;
+    string base;
+    string state;
+    boolean maintainer_can_modify;
+};
+
+public type CreatePullRequestReviewComment record {
+    string body;
+    string commit_id?;
+    string path?;
+    int position;
+    string side?;
+    int line?;
+    int start_line?;
+    string start_side?;
+    int in_reply_to?;
+
+};
+
+public type PullRequestReviewComment record {
+    string url="";
+    int pullRequestReviewId=0;
+    int id=0;
+    int position=0;
+    int originalPosition=0;
+    Creator user={};
+    string body="";
+    string createdAt="";
+    string updatedAt="";
+    string htmlUrl="";
+    string pullRequestUrl="";
+    int startLine?;
+    int originalStartLine?;
+    string startSide?;
+    int line=0;
+    int originalLine=0;
+    string side?;
+};
+
+public type ReviewComment record {
+    string path;
+    string body;
+    int position?;
+    int line?;
+    string side?;
+    int start_line?;
+    string start_side?;
+};
+
+public type CreatePullRequestReview record {
+    string commit_id;
+    string body;
+    string event;
+    ReviewComment[] comments?; 
+};
+
+public type PullRequestReviewSubmission record {
+    int id;
+    string node_id;
+    User user?;
+    string body?;
+    string state;
+    string html_url;
+    string pull_request_url;
+    string submitted_at;
+    string commit_id;
+    string author_association?;
+};
+
+public type GistFile record {|
+    string fileName;
+    string content;
+|};
+
+public type CreateGist record {|
+    string description?;
+    boolean 'public;
+    GistFile[] gistFiles;
+|};
+
+public type Gist record {
+    string url;
+    string forks_url;
+    string commits_url;
+    string id;
+    string node_id;
+    string git_pull_url;
+    string git_push_url;
+    string html_url;
+    string created_at;
+    string updated_at;
+    string description?;
+    int comments;
+    string comments_url;
+};
+
+public type OrganizationMembership record {
+    string url;
+    string state;
+    string role;
+    string organization_url;
+};
+
+public type FoundIssue record {
+    string id;
+    string url;
+    string repository_url;
+    string labels_url;
+    string comments_url;
+    string events_url;
+    string html_url;
+    int number;
+    string state;
+    string title;
+    string body;
+};
+
+// public enum ReviewAction {
+//     APPROVE="APPROVE",
+//     REQUEST_CHANGES="REQUEST_CHANGES",
+//     COMMENT="COMMENT"
+// };
