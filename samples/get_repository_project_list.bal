@@ -30,8 +30,9 @@ public function main() {
     int recordCount = 10;
     string repositoryOwner = "MadhurangaWije";
     string repositoryName = "github-connector";
-    github:Repository projectRepositoryList = {owner: {login: repositoryOwner}, name: repositoryName};
-    var responseRepoProjectList = githubClient->getRepositoryProjectList(projectRepositoryList, github:STATE_OPEN, recordCount);
+    
+    github:Repository projectRepository = {owner: {login: repositoryOwner}, name: repositoryName};
+    var responseRepoProjectList = githubClient->getRepositoryProjectList(projectRepository, github:STATE_OPEN, recordCount);
     if (responseRepoProjectList is github:ProjectList) {
         log:print(string`Project list of the given repository: ${responseRepoProjectList.getAllProjects().length()} Projects found`);
     } else {

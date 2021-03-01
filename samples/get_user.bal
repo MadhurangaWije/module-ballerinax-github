@@ -27,8 +27,9 @@ public function main() {
 
     // Get  user
     log:print("githubClient -> getUser()");
+    string username = "MadhurangaWije";
 
-    var response = githubClient->getUser("MadhurangaWije");
+    var response = githubClient->getUser(username);
     if (response is github:User) {
         log:print("User: "+response.toString());
     } else {

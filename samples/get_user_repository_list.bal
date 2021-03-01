@@ -28,7 +28,8 @@ public function main() {
     // Get user repository list
     log:print("githubClient -> getUserRepositoryList()");
     string username = "MadhurangaWije";
-    int recordCount = 10;
+    int recordCount = 10; // results per page.
+    
     var repoList = githubClient->getUserRepositoryList(username, recordCount);
     if (repoList is github:RepositoryList) {
         log:print(string`User Repository List: ${repoList.getAllRepositories().length()} repositories found`);

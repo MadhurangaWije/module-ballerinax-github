@@ -29,9 +29,11 @@ public function main() {
     log:print("githubClient -> getRepositoryProject()");
     string repositoryOwner = "MadhurangaWije";
     string repositoryName = "github-connector";
+    string projectNumber = 1;
+
     github:Repository projectRepository = {owner: {login: repositoryOwner}, name: repositoryName};
     github:Project repositoryProject = {};
-    var singleRepoProject = githubClient->getRepositoryProject(projectRepository, 1);
+    var singleRepoProject = githubClient->getRepositoryProject(projectRepository, projectNumber);
     if (singleRepoProject is github:Project) {
         log:print("Project of the given repository: "+ singleRepoProject.toString());
     } else {

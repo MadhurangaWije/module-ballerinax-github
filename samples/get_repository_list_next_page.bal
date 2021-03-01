@@ -25,10 +25,11 @@ github:Client githubClient = new (gitHubConfig);
 
 public function main() {
 
-    //Get a all the repositories of Organization
+    //Get a all the repositories of an Organization
     log:print("githubClient -> getRepositoryListNextPage()");
-    int recordCount = 10;
+    int recordCount = 10; // results per page.
     string organizationName = "wso2";
+
     github:Organization repositoryListOrganization = {login: organizationName};
     var repoList = githubClient->getOrganizationRepositoryList(repositoryListOrganization, recordCount);
     if (repoList is github:RepositoryList) {

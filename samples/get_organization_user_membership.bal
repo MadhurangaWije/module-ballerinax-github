@@ -27,9 +27,10 @@ public function main() {
 
     // Get organization user membership
     log:print("githubClient -> getOrganizationUserMembership()");
+    string organizationName = "MyTestOrgBallerina";
+    string username = "MadhurangaWije";
 
-
-    var response = githubClient->getOrganizationUserMembership("MyTestOrgBallerina", "MadhurangaWije");
+    var response = githubClient->getOrganizationUserMembership(organizationName, username);
     if (response is github:OrganizationMembership) {
         log:print("Organization Membership: "+response.toString());
     } else {

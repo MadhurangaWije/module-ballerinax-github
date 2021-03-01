@@ -29,7 +29,7 @@ public function main() {
    // Get column list next page
     log:print("githubClient -> getColumnListNextPage()");
     string resourcePath = "Github/MadhurangaWije/github-connector";
-    int recordCount = 1;
+    int recordCount = 10; // results per page
     github:Project columnListProject = {number: 1, resourcePath: resourcePath};
     columnListProject.owner.__typename = "repository";
     var columns = githubClient->getProjectColumnList(columnListProject, recordCount);

@@ -27,8 +27,9 @@ public function main() {
 
     //Get a single repository
     log:print("githubClient -> getRepository()");
-    github:Repository repository = {};
-    var repo = githubClient->getRepository("wso2/product-apim");
+    string repositoryIdentifier = "wso2/product-apim";
+    
+    var repo = githubClient->getRepository(repositoryIdentifier);
     if (repo is github:Repository) {
         log:print("Repository: "+ repo.toString());
     } else {

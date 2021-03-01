@@ -25,11 +25,13 @@ github:Client githubClient = new (gitHubConfig);
 
 public function main() {
 
-   // Get Branch list of a given repository
+   // Get Issue list of a given repository
     log:print("githubClient -> getIssueList()");
-    int recordCount = 10;
+    int recordCount = 10; // results per page
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
     
-    var issueList = githubClient->getIssueList(["MadhurangaWije", "github-connector"], github:STATE_OPEN, recordCount);
+    var issueList = githubClient->getIssueList([repisitoryOwner, repositoryName], github:STATE_OPEN, recordCount);
     if (issueList is github:IssueList) {
         log:print(string `Issue List: ${issueList.getAllIssues().length()} Issues found`);
     } else {

@@ -27,7 +27,7 @@ public function main() {
 
     // Get project column list
     log:print("githubClient -> getProjectColumnList()");
-    int recordCount = 1;
+    int recordCount = 10; // results per page
     string resourcePath = "Github/MadhurangaWije/github-connector";
     github:Project columnListProject = {number: 1, resourcePath: resourcePath};
     columnListProject.owner.__typename = "repository";

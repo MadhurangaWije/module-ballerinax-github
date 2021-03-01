@@ -27,8 +27,9 @@ public function main() {
 
     //Get a list of projects of an organization
     log:print("githubClient -> getOrganizationProjectList()");
-    int recordCount = 10;
+    int recordCount = 10; // results per page
     string organizationName = "wso2";
+
     github:Organization projectListOrganization = {login: organizationName};
     var responseProjectList = githubClient->getOrganizationProjectList(projectListOrganization, github:STATE_OPEN, recordCount);
     if (responseProjectList is github:ProjectList) {

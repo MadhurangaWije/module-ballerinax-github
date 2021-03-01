@@ -27,8 +27,9 @@ public function main() {
 
     // Get organization
     log:print("githubClient -> getOrganization()");
+    string organizationName = "wso2";
 
-    var organization = githubClient->getOrganization("wso2");
+    var organization = githubClient->getOrganization(organizationName);
     if (organization is github:Organization) {
         log:print("Organization: "+ organization.toString());
     } else {

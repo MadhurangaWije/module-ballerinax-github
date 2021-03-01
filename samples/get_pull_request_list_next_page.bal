@@ -30,6 +30,7 @@ public function main() {
     int recordCount = 1;
     string organizationName = "wso2";
     string repositoryName = "product-is";
+    
     github:Repository pullRequestRepository = {owner: {login: organizationName}, name: repositoryName};
     var prList = githubClient->getPullRequestList(pullRequestRepository, github:STATE_CLOSED, recordCount);
     if (prList is github:PullRequestList) {

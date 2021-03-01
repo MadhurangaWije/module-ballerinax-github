@@ -28,14 +28,17 @@ public function main() {
     // Create a pull request
     log:print("githubClient -> createPullRequest()");
 
-    github:CreatePullRequest createPullRequest = {
-        title:"This is a pull request made for testing from feature4 -> master",
+    github:CreatePullRequest createPullRequestPayload = {
+        title:"Feature4 Implementation",
         head:"feature4",
         base:"master",
-        body:"ksdfiusdhfs sdfbiusdhfus dfounsoud"
+        body:"Implementation of feature4"
     };
 
-    var response = githubClient->createPullRequest("MadhurangaWije", "github-connector",createPullRequest);
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
+
+    var response = githubClient->createPullRequest(repositoryOwner, repositoryName, createPullRequestPayload);
     if (response is github:PullRequest) {
         log:print("Created Pull Request: "+ response.toBalString());
     } else {

@@ -33,8 +33,8 @@ public function main() {
         'public: true,
         gistFiles:[
             {
-                fileName:"first_bal_gist.txt",
-                content:"Hello sdjf sidf isd fs dfs d fsjd fojsd fsod"
+                fileName:"hello_ballerina.bal",
+                content:"Ballerina hello world program!"
             }
         ]
     };

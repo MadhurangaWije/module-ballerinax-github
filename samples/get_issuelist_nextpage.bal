@@ -27,9 +27,11 @@ public function main() {
 
    // Get Branch list of a given repository
     log:print("githubClient -> getIssueListNextPage()");
-    int recordCount = 10;
+    int recordCount = 10; // results per page
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
 
-    var issueList = githubClient->getIssueList(["MadhurangaWije", "github-connector"], github:STATE_OPEN, recordCount);
+    var issueList = githubClient->getIssueList([repositoryOwner, repositoryName], github:STATE_OPEN, recordCount);
     if (issueList is github:IssueList) {
         log:print("Issue List: "+ issueList.toString());
 

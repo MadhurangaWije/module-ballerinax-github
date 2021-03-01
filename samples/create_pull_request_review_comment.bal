@@ -28,14 +28,18 @@ public function main() {
     // Create a review comment for a pull request
     log:print("githubClient -> createPullRequestReviewComment()");
 
-    github:CreatePullRequestReviewComment createPullRequestReviewComment = {
+    github:CreatePullRequestReviewComment pullRequestReviewCommentRequestPayload = {
         body:"This can be improved with better logic!",
         position: 4,
         path:"src/db/main.bal",
         commit_id:"89c0f8fa665f1e55a7dccc70a1bf6ffe83df97e5"
     };
 
-    var response = githubClient->createPullRequestReviewComment("MadhurangaWije", "github-connector", 206, createPullRequestReviewComment);
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
+    int pullRequestNumber = 206;
+
+    var response = githubClient->createPullRequestReviewComment(repositoryOwner, repositoryName, pullRequestNumber, pullRequestReviewCommentRequestPayload);
 
     if (response is github:PullRequestReviewComment) {
         log:print("Pull Request Review Comment: "+response.toBalString());

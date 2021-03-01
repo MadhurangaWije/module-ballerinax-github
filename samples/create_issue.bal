@@ -27,10 +27,16 @@ github:Client githubClient = new (gitHubConfig);
 public function main() {
     log:print("githubClient -> createIssue()");
 
-    string issueAssignee = "MadhurangaWije";
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
+    string issueTitle = "This is a test issue title";
+    string issueContent = "This is the body of the test issue from the sample code";
+    string[] issueLabelList = ["bug", "critical"];
+    string[] issueAssigneeList = ["MadhurangaWije"];
 
-    var createdIssue = githubClient->createIssue(issueAssignee, "github-connector",
-    "Sample: This is a test issue", "This is the body of the test issue from the sample code", ["bug", "critical"], [issueAssignee]);
+    var createdIssue = githubClient->createIssue(repositoryOwner, repositoryName,
+    issueTitle, issueContent, issueLabelList, issueAssigneeList);
+    
     if (createdIssue is github:Issue) {
         log:print("Created Issue: "+ createdIssue.toString());
     } else {

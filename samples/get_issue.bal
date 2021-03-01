@@ -25,9 +25,12 @@ github:Client githubClient = new (gitHubConfig);
 
 public function main() {
 
-    // Get  an Issue
+    // Get an Issue
     int issueNumber = 158;
-    var response = githubClient->getIssue("MadhurangaWije", "github-connector", issueNumber);
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
+
+    var response = githubClient->getIssue(repositoryOwner, repositoryName, issueNumber);
     if (response is github:IssueFound) {
         log:print("Issue: "+response.toString());
     } else {

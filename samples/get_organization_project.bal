@@ -25,12 +25,13 @@ github:Client githubClient = new (gitHubConfig);
 
 public function main() {
 
-    // Get organization project
+    // Get an organization project
     log:print("githubClient -> getOrganizationProject()");
 
     int projectNumber = 26;
+    string organizationName = "wso2";
 
-    var project = githubClient->getOrganizationProject("wso2", projectNumber);
+    var project = githubClient->getOrganizationProject(organizationName, projectNumber);
     if (project is github:Project) {
         log:print("Organization Project: "+ project.toString());
     } else {

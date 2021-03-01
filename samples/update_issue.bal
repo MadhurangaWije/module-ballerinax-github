@@ -30,12 +30,13 @@ public function main() {
     string repositoryOwner = "MadhurangaWije";
     string repositoryName = "github-connector";
     int issueNumber = 198;
-    string issueTitle = "This is a test issue";
-    string issueContent = "This is the body of the test issue updated";
-    string[] labelList = ["bug", "critical"];
-    string[] assigneeList = ["MadhurangaWije"];
+    string updatedIssueTitle = "This is a test issue";
+    string updatedIssueContent = "This is the body of the test issue updated";
+    string[] updatedLabelList = ["bug", "critical"];
+    string[] updatedAssigneeList = ["MadhurangaWije"];
+
     var createdIssue = githubClient->updateIssue(repositoryOwner, repositoryName, issueNumber,
-    issueTitle, issueContent, labelList, assigneeList, github:STATE_OPEN);
+    updatedIssueTitle, updatedIssueContent, updatedLabelList, updatedAssigneeList, github:STATE_OPEN);
     if (createdIssue is github:Issue) {
         log:print("Updated Issue: "+ createdIssue.toString());
     } else {

@@ -27,9 +27,11 @@ public function main() {
 
    // Get Branch list of a given repository
     log:print("githubClient -> getBranchList()");
-    int recordCount = 10;
+    int recordCount = 10; // number of records per page
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
     
-    var branchList = githubClient->getBranchList(["MadhurangaWije", "github-connector"], recordCount);
+    var branchList = githubClient->getBranchList([repositoryOwner, repositoryName], recordCount);
     if (branchList is github:BranchList) {
         log:print(string `Branch List: ${branchList.getAllBranches().length()} found`);
     } else {

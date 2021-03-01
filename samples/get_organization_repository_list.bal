@@ -27,8 +27,9 @@ public function main() {
 
     // Get organization repository list
     log:print("githubClient -> getOrganizationRepositoryList()");
-
-    var repoList = githubClient->getOrganizationRepositoryList("wso2", 10);
+    string organizationName = "wso2";
+    int recordCount = 10; // results per page
+    var repoList = githubClient->getOrganizationRepositoryList(organizationName, recordCount);
     if (repoList is github:RepositoryList) {
         log:print(string `Organization Repository List: ${repoList.getAllRepositories().length()} Repositories found`);
     } else {

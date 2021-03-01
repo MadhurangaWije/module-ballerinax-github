@@ -28,10 +28,10 @@ public function main() {
     // Update a pull request
     log:print("githubClient -> updatePullRequest()");
 
-    github:UpdatePullRequest pullRequestUpdate = {
+    github:UpdatePullRequest pullRequestUpdatePayload = {
         title:"This is a pull request made for testing updated",
         base:"master",
-        body:"ksdfiusdhfs sdfbiusdhfus dfounsoud",
+        body:"updated pull request body",
         state: "open",
         maintainer_can_modify: false
     };
@@ -40,7 +40,7 @@ public function main() {
     string githubConnector = "github-connector";
     int pullNumber = 165;
 
-    var response = githubClient->updatePullRequest(repositoryOwner, githubConnector, pullNumber, pullRequestUpdate);
+    var response = githubClient->updatePullRequest(repositoryOwner, githubConnector, pullNumber, pullRequestUpdatePayload);
     if (response is github:PullRequest) {
         log:print("Updated Pull Request: "+ response.toString());
     } else {

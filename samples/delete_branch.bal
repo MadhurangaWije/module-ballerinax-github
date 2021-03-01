@@ -25,10 +25,14 @@ github:Client githubClient = new (gitHubConfig);
 
 public function main() {
 
-    // Create a review comment for a pull request
+    // Delete a branch in a repository.
     log:print("githubClient -> deleteBranch()");
 
-    var response = githubClient->deleteBranch("MadhurangaWije", "github-connector", "feature3");
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
+    string branchName = "feature3";
+
+    var response = githubClient->deleteBranch(repositoryOwner, repositoryName, branchName);
     if (response is error) {
         log:printError("Error: "+ response.detail().toBalString());
     } else {

@@ -25,15 +25,20 @@ github:Client githubClient = new (gitHubConfig);
 
 public function main() {
 
-    // Create a review comment for a pull request
+    // Create a review for a pull request
     log:print("githubClient -> createPullRequestReview()");
 
-    github:CreatePullRequestReview createPullRequestReview = {
-        body:"this is create pr review body. blah blah blah3",
+    github:CreatePullRequestReview pullRequestReviewRequestPayload = {
+        body:"This is the PR review content.",
         event:"COMMENT"
     };
 
-    var response = githubClient->createPullRequestReview("MadhurangaWije", "github-connector", 206, createPullRequestReview);
+    string repositoryOwner = "MadhurangaWije";
+    string repositoryName = "github-connector";
+    int pullRequestNumber = 206;
+    
+
+    var response = githubClient->createPullRequestReview(repositoryOwner, repositoryName, pullRequestNumber, pullRequestReviewRequestPayload);
     if (response is github:PullRequestReview) {
         log:print("Pull Request Review: "+ response.toBalString());
     } else {

@@ -25,10 +25,12 @@ github:GitHubConfiguration gitHubConfig = {
 github:Client githubClient = new (gitHubConfig);
 
 public function main() {
-   //Get card list next page
+   //Get project card list next page
     log:print("githubClient -> getCardListNextPage()");
+
     string resourcePath = "Github/MadhurangaWije/github-connector";
     int recordCount = 1;
+
     github:Project columnListProject = {number: 1, resourcePath: resourcePath};
     columnListProject.owner.__typename = "repository";
     github:ColumnList columnList = new;
@@ -38,6 +40,7 @@ public function main() {
     } else {
         log:printError("Error: "+ columns.toString());
     }
+    
     github:Column column = columnList.getAllColumns()[0];
     github:CardList cardList = column.getCardList();
     var cardListNextPage = githubClient->getCardListNextPage(cardList);
